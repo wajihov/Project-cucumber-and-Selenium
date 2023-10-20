@@ -1,8 +1,22 @@
 package steps;
 
-public class Authetification {
+import java.util.concurrent.TimeUnit;
 
-	/*WebDriver webDriver = null;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import pageFactory.HomePage;
+import pageFactory.LoginPage_Factory;
+
+public class AuthentificationPageFactory {
+
+	WebDriver webDriver = null;
+	LoginPage_Factory loginPage_Factory;
+	HomePage homePage;
 
 	@SuppressWarnings("deprecation")
 	@Given("Browser is open")
@@ -15,6 +29,7 @@ public class Authetification {
 
 	@And("user in on login page")
 	public void user_in_on_login_page() {
+		System.out.println("=============== Page Factory ==============");
 		System.out.println("Inside step - user in on login page");
 		webDriver.navigate().to("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
 		webDriver.manage().window().maximize();
@@ -23,36 +38,27 @@ public class Authetification {
 	@When("^user enters (.*) and (.*)$")
 	public void user_enters_email_and_password(String email, String password) throws Exception {
 		System.out.println("Inside step - user enters email and password");
-		webDriver.findElement(By.name("username")).sendKeys(email);
-		webDriver.findElement(By.name("password")).sendKeys(password);
+		loginPage_Factory = new LoginPage_Factory(webDriver);
+		loginPage_Factory.enterLogin(email);
+		loginPage_Factory.enterPassword(password);
 		Thread.sleep(2000);
 	}
 
 	@And("user clicks on login")
 	public void user_clicks_on_login() {
 		System.out.println("Inside Step - user clicks on login");
-		webDriver.findElement(By.cssSelector("div#app button[type=\"submit\"]")).click();
+		loginPage_Factory.clickBottonLogin();
 	}
 
 	@Then("user navigated to the home page")
 	public void user_navigated_to_the_home_page() throws Exception {
 		System.out.println("Inside step - user navigated to the home page");
-		WebElement dasboardTxt = webDriver.findElement(By.cssSelector("div#app h6"));
-		// WebElement invalidCredentialsTxt = webDriver
-		// .findElement(By.cssSelector("div#app
-		// div.oxd-alert-content.oxd-alert-content--error > p"));
-		if (dasboardTxt.getText().contains("Dashboard")) {
-			assertTrue(dasboardTxt.getText().contains("Dashboard"));
-		}
-		/*
-		 * if (invalidCredentialsTxt.getText().contains("Invalid credentials")) {
-		 * assertTrue(invalidCredentialsTxt.getText().contains("Invalid credentials"));
-		 * }
-		 */
-
-		/*Thread.sleep(2000);
+		loginPage_Factory.checkHeader();
+		homePage = new HomePage(webDriver);
+		homePage.disconnect();
+		Thread.sleep(2000);
 		webDriver.close();
 		webDriver.quit();
-	}*/
+	}
 
 }
